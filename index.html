@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>NewCredit Clone — Demo Loan App</title>
+  <meta name="description" content="A demo clone of the NewCredit instant loan app flow: register, check your credit limit, apply for a loan, and track repayment. Educational UI clone — not a real lender." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e7c5a'/%3E%3Cpath d='M10 22V10h12M10 16h10' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="demo-banner" role="note">
+    Demo clone for learning — not affiliated with Newedge Finance Ltd. No real loans, no real data.
+  </div>
+
+  <div class="phone" data-testid="phone-shell">
+    <div class="phone-notch" aria-hidden="true"></div>
+    <div class="phone-screen" id="app">
+
+      <!-- ============ WELCOME / LOGIN ============ -->
+      <section class="screen" id="screen-welcome" data-testid="screen-welcome">
+        <div class="onboard-art" aria-hidden="true">
+          <svg viewBox="0 0 200 200" class="onboard-svg">
+            <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-opacity="0.15" stroke-width="2" stroke-dasharray="4 6"/>
+            <rect x="56" y="52" width="88" height="96" rx="14" fill="currentColor" fill-opacity="0.08"/>
+            <rect x="68" y="72" width="64" height="10" rx="5" fill="currentColor" fill-opacity="0.35"/>
+            <rect x="68" y="90" width="44" height="8" rx="4" fill="currentColor" fill-opacity="0.25"/>
+            <circle cx="100" cy="128" r="16" fill="currentColor" fill-opacity="0.85"/>
+            <path d="M93 128l5 5 9-10" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="onboard-copy">
+          <h1>Instant loans,<br/>without the stress.</h1>
+          <p>Register with your phone number, get a credit limit in minutes, and borrow up to ₦300,000 straight to your bank account.</p>
+        </div>
+        <form class="login-form" id="login-form" data-testid="form-login">
+          <label for="phone-input">Phone number</label>
+          <div class="phone-input-row">
+            <span class="phone-prefix" aria-hidden="true">+234</span>
+            <input id="phone-input" data-testid="input-phone" type="tel" inputmode="numeric" placeholder="801 234 5678" maxlength="11" autocomplete="tel" required />
+          </div>
+          <p class="field-error" id="phone-error" data-testid="text-phone-error" hidden>Enter a valid 11-digit Nigerian phone number.</p>
+          <button type="submit" class="btn btn-primary btn-block" data-testid="button-continue">Continue</button>
+          <p class="legal-note">By continuing you agree to the <span class="link">Terms of Use</span> and <span class="link">Privacy Policy</span>.</p>
+        </form>
+      </section>
+
+      <!-- ============ OTP VERIFY ============ -->
+      <section class="screen" id="screen-otp" data-testid="screen-otp" hidden>
+        <button type="button" class="btn-back" id="otp-back" data-testid="button-otp-back" aria-label="Back to login">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 class="screen-title">Verify your number</h2>
+        <p class="screen-sub" id="otp-sent-to">We sent a 4-digit code to your phone.</p>
+        <div class="otp-row" id="otp-row">
+          <input class="otp-box" data-testid="input-otp-1" type="tel" maxlength="1" inputmode="numeric" aria-label="Digit 1" />
+          <input class="otp-box" data-testid="input-otp-2" type="tel" maxlength="1" inputmode="numeric" aria-label="Digit 2" />
+          <input class="otp-box" data-testid="input-otp-3" type="tel" maxlength="1" inputmode="numeric" aria-label="Digit 3" />
+          <input class="otp-box" data-testid="input-otp-4" type="tel" maxlength="1" inputmode="numeric" aria-label="Digit 4" />
+        </div>
+        <p class="field-error" id="otp-error" data-testid="text-otp-error" hidden>Enter the 4-digit code.</p>
+        <button type="button" class="btn btn-primary btn-block" id="otp-verify" data-testid="button-verify">Verify</button>
+        <p class="screen-sub subtle">Demo tip: any 4 digits work.</p>
+      </section>
+
+      <!-- ============ APP SHELL (tabs) ============ -->
+      <div id="app-shell" data-testid="app-shell" hidden>
+        <header class="app-topbar">
+          <div class="topbar-user">
+            <div class="avatar" id="user-avatar" aria-hidden="true">N</div>
+            <div>
+              <p class="hello">Good day</p>
+              <p class="user-name" id="user-name" data-testid="text-user-name">Friend</p>
+            </div>
+          </div>
+          <span class="badge-demo">Demo</span>
+        </header>
+
+        <main class="app-body" id="tab-home" data-testid="tab-home">
+          <section class="limit-card" aria-label="Credit limit">
+            <p class="limit-label">Your credit limit</p>
+            <p class="limit-amount" id="limit-amount" data-testid="text-limit">₦150,000</p>
+            <p class="limit-sub">AI-checked · no collateral</p>
+            <button type="button" class="btn btn-light btn-block" id="btn-borrow" data-testid="button-borrow">Get a loan</button>
+          </section>
+
+          <section class="active-loan" id="active-loan-home" data-testid="card-active-loan" hidden>
+            <div class="loan-card-head">
+              <div>
+                <p class="loan-card-title">Active loan</p>
+                <p class="loan-card-sub" id="home-loan-sub">₦50,000 · 180 days</p>
+              </div>
+              <span class="pill pill-ok" id="home-loan-status">Repaying</span>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="Loan repaid" aria-valuemin="0" aria-valuemax="100" id="home-loan-progress-wrap">
+              <div class="progress-fill" id="home-loan-progress"></div>
+            </div>
+            <p class="loan-card-sub" id="home-loan-due">Due in 180 days</p>
+          </section>
+
+          <h3 class="section-title">Why NewCredit</h3>
+          <ul class="feature-list" role="list">
+            <li>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <div><strong>Instant disbursement</strong><span>Money hits your bank account in minutes</span></div>
+            </li>
+            <li>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div><strong>No collateral</strong><span>Unsecured personal loans up to ₦300,000</span></div>
+            </li>
+            <li>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+              <div><strong>Build your limit</strong><span>Repay on time and your limit grows</span></div>
+            </li>
+          </ul>
+        </main>
+
+        <main class="app-body" id="tab-loans" data-testid="tab-loans" hidden>
+          <h2 class="screen-title">My loans</h2>
+          <section class="empty-state" id="loans-empty" data-testid="card-loans-empty">
+            <div class="empty-icon" aria-hidden="true">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>
+            </div>
+            <h3>No loans yet</h3>
+            <p>Your active and repaid loans will appear here.</p>
+            <button type="button" class="btn btn-primary" id="btn-borrow-empty" data-testid="button-borrow-empty">Get a loan</button>
+          </section>
+          <section id="loans-list" data-testid="list-loans" hidden></section>
+        </main>
+
+        <main class="app-body" id="tab-profile" data-testid="tab-profile" hidden>
+          <h2 class="screen-title">Profile</h2>
+          <div class="profile-card">
+            <div class="profile-row"><span>Phone</span><strong id="profile-phone" data-testid="text-profile-phone">+234 …</strong></div>
+            <div class="profile-row"><span>BVN</span><strong>•••• 8821</strong></div>
+            <div class="profile-row"><span>Bank</span><strong>GTBank • 0123…89</strong></div>
+            <div class="profile-row"><span>Credit limit</span><strong id="profile-limit">₦150,000</strong></div>
+          </div>
+          <h3 class="section-title">Preferences</h3>
+          <div class="toggle-row">
+            <div><strong>Repayment reminders</strong><span>SMS before due date</span></div>
+            <button type="button" class="toggle" id="toggle-reminders" data-testid="button-toggle-reminders" role="switch" aria-checked="true" aria-label="Repayment reminders"></button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-block btn-logout" id="btn-logout" data-testid="button-logout">Log out</button>
+        </main>
+
+        <nav class="tabbar" aria-label="App navigation">
+          <button type="button" class="tabbtn active" data-tab="home" data-testid="button-tab-home" aria-current="page">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5z"/></svg>
+            Home
+          </button>
+          <button type="button" class="tabbtn" data-tab="loans" data-testid="button-tab-loans">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+            Loans
+          </button>
+          <button type="button" class="tabbtn" data-tab="profile" data-testid="button-tab-profile">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
+            Profile
+          </button>
+        </nav>
+      </div>
+
+      <!-- ============ LOAN APPLY FLOW ============ -->
+      <section class="screen" id="screen-apply" data-testid="screen-apply" hidden>
+        <button type="button" class="btn-back" id="apply-back" data-testid="button-apply-back" aria-label="Back to home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 class="screen-title">Get a loan</h2>
+        <p class="screen-sub">Choose an amount and a repayment term that works for you.</p>
+
+        <div class="amount-block">
+          <p class="amount-label">How much do you need?</p>
+          <p class="amount-value" id="amount-value" data-testid="text-amount">₦50,000</p>
+          <input type="range" id="amount-slider" data-testid="input-amount" min="10000" max="300000" step="5000" value="50000" aria-label="Loan amount in naira" />
+          <div class="range-marks"><span>₦10k</span><span>₦300k</span></div>
+        </div>
+
+        <p class="amount-label">For how long?</p>
+        <div class="term-chips" role="group" aria-label="Loan term" id="term-chips">
+          <button type="button" class="chip" data-days="91" data-testid="button-term-91">91 days</button>
+          <button type="button" class="chip" data-days="120" data-testid="button-term-120">120 days</button>
+          <button type="button" class="chip active" data-days="180" data-testid="button-term-180">180 days</button>
+          <button type="button" class="chip" data-days="270" data-testid="button-term-270">270 days</button>
+          <button type="button" class="chip" data-days="365" data-testid="button-term-365">365 days</button>
+        </div>
+
+        <div class="calc-card" aria-label="Loan cost breakdown">
+          <div class="calc-row"><span>Monthly interest</span><strong id="calc-rate" data-testid="text-rate">3%</strong></div>
+          <div class="calc-row"><span>Total interest</span><strong id="calc-interest" data-testid="text-interest">₦9,000</strong></div>
+          <div class="calc-row"><span>Monthly payment</span><strong id="calc-monthly" data-testid="text-monthly">₦19,833</strong></div>
+          <div class="calc-row total"><span>Total repayment</span><strong id="calc-total" data-testid="text-total">₦59,000</strong></div>
+          <div class="calc-row"><span>Due date</span><strong id="calc-due" data-testid="text-due">—</strong></div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-block" id="btn-submit-loan" data-testid="button-submit-loan">Submit application</button>
+        <p class="legal-note center">Demo only — no real application is submitted.</p>
+      </section>
+
+      <!-- ============ PROCESSING ============ -->
+      <section class="screen screen-center" id="screen-processing" data-testid="screen-processing" hidden>
+        <div class="spinner" role="status" aria-label="Assessing application"></div>
+        <h2 class="screen-title">Assessing your application</h2>
+        <p class="screen-sub">Our AI is reviewing your credit profile…</p>
+      </section>
+
+      <!-- ============ APPROVED ============ -->
+      <section class="screen screen-center" id="screen-approved" data-testid="screen-approved" hidden>
+        <div class="approve-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2 class="screen-title">Approved</h2>
+        <p class="screen-sub" id="approved-sub">₦50,000 is on its way to your bank account.</p>
+        <button type="button" class="btn btn-primary btn-block" id="btn-done" data-testid="button-done">Back to home</button>
+      </section>
+
+      <!-- ============ REPAY MODAL ============ -->
+      <div class="sheet-backdrop" id="repay-backdrop" hidden>
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="repay-title">
+          <h3 id="repay-title">Make a repayment</h3>
+          <p class="screen-sub" id="repay-sub">Choose an amount to repay today.</p>
+          <div class="repay-options" id="repay-options">
+            <button type="button" class="btn btn-ghost btn-block" data-frac="0.25" data-testid="button-repay-25">25% of balance</button>
+            <button type="button" class="btn btn-ghost btn-block" data-frac="0.5" data-testid="button-repay-50">50% of balance</button>
+            <button type="button" class="btn btn-ghost btn-block" data-frac="1" data-testid="button-repay-100">Repay in full</button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-block btn-cancel" id="repay-cancel" data-testid="button-repay-cancel">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <p class="desktop-hint">Best viewed on a phone — this is a mobile app clone.</p>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
